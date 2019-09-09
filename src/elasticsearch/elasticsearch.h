@@ -45,7 +45,7 @@ class ElasticSearch {
         bool index(const std::string& index, const std::string& type, const std::string& id, const Json::Object& jData);
 
         /// Index a document with automatic id creation
-        std::string index(const std::string& index, const std::string& type, const Json::Object& jData);
+        bool index(const std::string& index, const std::string& type, const Json::Object& jData);
 
         /// Update a document field.
         bool update(const std::string& index, const std::string& type, const std::string& id, const std::string& key, const std::string& value);

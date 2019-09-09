@@ -161,7 +161,7 @@ bool ElasticSearch::index(const std::string& index, const std::string& type, con
 }
 
 /// Index a document with automatic id creation
-std::string ElasticSearch::index(const std::string& index, const std::string& type, const Json::Object& jData){
+bool ElasticSearch::index(const std::string& index, const std::string& type, const Json::Object& jData){
 
     if(_readOnly)
         return "";
@@ -174,15 +174,14 @@ std::string ElasticSearch::index(const std::string& index, const std::string& ty
 
     Json::Object result;
     _http.post(url.str().c_str(), data.str().c_str(), &result);
-
-    if(!result.member("created") || !result.getValue("created")){
+    if(!result.member("status") || result.getValue("status").getInt() != 201){
         std::cout << "url: " << url.str() << std::endl;
         std::cout << "data: " << data.str() << std::endl;
         std::cout << "result: " << result.str() << std::endl;
-        EXCEPTION("The index induces error.");
+        return false;
     }
 
-    return result.getValue("_id").getString();
+    return true;
 }
 
 // Update a document field.
